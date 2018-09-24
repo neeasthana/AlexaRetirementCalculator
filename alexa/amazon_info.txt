@@ -1,0 +1,6 @@
+# Skill ID for Amazon Alexa Skill
+
+Skill ID: amzn1.ask.skill.348afc61-b339-4ba5-96c9-0dcb67923be5
+
+# Role for Lambda Function Execution. Given basic lambda function permissions inside of AWS IAM.
+Role: AlexaRole

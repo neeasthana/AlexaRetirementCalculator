@@ -1,0 +1,42 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "retirement calculator",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "CalculateRetirementTime",
+                    "slots": [],
+                    "samples": [
+                        "when is my retirement",
+                        "how much longer do i have till retirement",
+                        "can you calculate my retirement time",
+                        "what my retirement time is",
+                        "what is my retirement time",
+                        "Calculate my retirement time"
+                    ]
+                }
+            ],
+            "types": []
+        }
+    }
+}
