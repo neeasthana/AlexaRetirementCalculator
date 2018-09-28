@@ -59,7 +59,7 @@ def on_intent(intent_request, session):
 
     # Dispatch to your skill's intent handlers
     if intent_name == "CalculateRetirementTime":
-        return get_dojo_info_response()
+        return get_dojo_info_response(intent_request, session)
     # elif intent_name == "DojoStaffIntent":
     #     return get_dojo_staff_response()
     # elif intent_name == "DojoStackIntent":
@@ -112,14 +112,44 @@ def get_help_response():
 def _retirement_time():
     return 20
 
-def get_dojo_info_response():
+
+def build_response2(message, session_attributes={}):
+    response = {}
+    response['version'] = '1.0'
+    response['sessionAttributes'] = session_attributes
+    response['response'] = message
+    return response
+
+
+def continue_dialog(session_attributes):
+    message = {}
+    message['shouldEndSession'] = False
+    message['directives'] = [{'type': 'Dialog.Delegate'}]
+    return build_response2(message, session_attributes)
+
+
+
+def get_dojo_info_response(intent_request, session):
+    dialog_state = intent_request['dialogState']
+
     session_attributes = {}
     card_title = "Calculate_Retirement_Time"
-    speech_output = "You can retire in " + str(_retirement_time()) + " years"
+    speech_output = "Awesome! You would like to estimate when you can retire! i can help you figure it out! I am going to ask you a couple questions about your current financial picture to give you the best estimate. Is that okay?" 
 
-    reprompt_text = speech_output
-    should_end_session = True
-    return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
+    #You can retire in " + str(_retirement_time()) + " years"
+
+    if dialog_state in ("STARTED", "IN_PROGRESS"):
+        return continue_dialog(session_attributes)
+
+    elif dialog_state == "COMPLETED":
+        # return statement("trip_intent", "Have a good trip")
+        reprompt_text = speech_output
+        should_end_session = True
+        return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
+
+    else:
+        return statement("trip_intent", "No dialog")
+
 
 
 # def get_dojo_info_response():
