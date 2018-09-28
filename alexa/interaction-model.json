@@ -25,8 +25,19 @@
                 },
                 {
                     "name": "CalculateRetirementTime",
-                    "slots": [],
+                    "slots": [
+                        {
+                            "name": "Age",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "I am turning {Age}",
+                                "I am {Age} years old",
+                                "I am {Age}"
+                            ]
+                        }
+                    ],
                     "samples": [
+                        "when can i retire",
                         "when is my retirement",
                         "how much longer do i have till retirement",
                         "can you calculate my retirement time",
@@ -37,6 +48,37 @@
                 }
             ],
             "types": []
-        }
+        },
+        "dialog": {
+            "intents": [
+                {
+                    "name": "CalculateRetirementTime",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "Age",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.687354665039.238040448519"
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "prompts": [
+            {
+                "id": "Elicit.Slot.687354665039.238040448519",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "How old are you"
+                    }
+                ]
+            }
+        ]
     }
 }
