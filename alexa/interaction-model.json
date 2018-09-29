@@ -34,6 +34,39 @@
                                 "I am {Age} years old",
                                 "I am {Age}"
                             ]
+                        },
+                        {
+                            "name": "Avg_Monthly_Spending",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "I spend approximately {Avg_Monthly_Spending}",
+                                "I spend about {Avg_Monthly_Spending}",
+                                "Approximately {Avg_Monthly_Spending}",
+                                "About {Avg_Monthly_Spending}",
+                                "{Avg_Monthly_Spending}",
+                                "I spend {Avg_Monthly_Spending}",
+                                "On average I spend {Avg_Monthly_Spending}"
+                            ]
+                        },
+                        {
+                            "name": "Savings",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "{Savings} Dollars",
+                                "{Savings}",
+                                "I have saved {Savings} dollars",
+                                "I have saved {Savings}",
+                                "I have {Savings} dollars"
+                            ]
+                        },
+                        {
+                            "name": "Monthly_Savings",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "i save {Monthly_Savings} every month",
+                                "about {Monthly_Savings} dollars",
+                                "I save about {Monthly_Savings} every month"
+                            ]
                         }
                     ],
                     "samples": [
@@ -64,6 +97,33 @@
                             "prompts": {
                                 "elicitation": "Elicit.Slot.687354665039.238040448519"
                             }
+                        },
+                        {
+                            "name": "Avg_Monthly_Spending",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1450619927829.843121747797"
+                            }
+                        },
+                        {
+                            "name": "Savings",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1450619927829.1008501545480"
+                            }
+                        },
+                        {
+                            "name": "Monthly_Savings",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": false,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "elicitation": "Elicit.Slot.1450619927829.961908154524"
+                            }
                         }
                     ]
                 }
@@ -75,7 +135,34 @@
                 "variations": [
                     {
                         "type": "PlainText",
-                        "value": "How old are you"
+                        "value": "Awesome! You would like to estimate when you can retire! i can help you figure it out! I am going to ask you a couple questions about your current financial picture to give you the best estimate. First question. how old are you"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1450619927829.843121747797",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "on average, how much do you spend every month"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1450619927829.1008501545480",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "Approximately how much do you have saved right now including all bank accounts four oh one ks brokerage accounts and other retirement accounts"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1450619927829.961908154524",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "how much do save every month in your retirement accounts bank accounts and brokerage accounts"
                     }
                 ]
             }
