@@ -134,9 +134,7 @@ def get_dojo_info_response(intent_request, session):
 
     session_attributes = {}
     card_title = "Calculate_Retirement_Time"
-    speech_output = "Awesome! You would like to estimate when you can retire! i can help you figure it out! I am going to ask you a couple questions about your current financial picture to give you the best estimate. Is that okay?" 
-
-    #You can retire in " + str(_retirement_time()) + " years"
+    speech_output = "You can retire in " + str(_retirement_time()) + " years"
 
     if dialog_state in ("STARTED", "IN_PROGRESS"):
         return continue_dialog(session_attributes)
