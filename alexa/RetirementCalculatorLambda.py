@@ -133,6 +133,8 @@ def get_dojo_info_response(intent_request, session):
     dialog_state = intent_request['dialogState']
 
     session_attributes = {}
+    if (session["attributes"]):
+        session_attributes  = session["attributes"]
     card_title = "Calculate_Retirement_Time"
     speech_output = "You can retire in " + str(_retirement_time()) + " years"
 
