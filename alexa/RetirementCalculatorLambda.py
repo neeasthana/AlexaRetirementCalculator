@@ -179,6 +179,20 @@ def _retirement_time():
 
 
 
+# Example intent_request: 
+# {'type': 'IntentRequest', 
+#  'requestId': 'amzn1.echo-api.request.4390e9d3-974a-47db-9596-ae9c59e141cd', 
+#  'timestamp': '2018-10-01T19:31:41Z', 
+#  'locale': 'en-US', 
+#  'intent': {
+#       'name': 'CalculateRetirementTime', 
+#       'confirmationStatus': 'NONE', 
+#       'slots': {
+#           'Savings': {'name': 'Savings', 'value': '200000', 'confirmationStatus': 'NONE'}, 
+#           'Monthly_Savings': {'name': 'Monthly_Savings', 'value': '2000', 'confirmationStatus': 'NONE'}, 
+#           'Avg_Monthly_Spending': {'name': 'Avg_Monthly_Spending', 'value': '3000', 'confirmationStatus': 'NONE'}, 
+#           'Age': {'name': 'Age', 'value': '55', 'confirmationStatus': 'NONE'}}}, 
+#  'dialogState': 'COMPLETED'}
 def calculate_retirement_time(intent_request, session):
     dialog_state = intent_request['dialogState']
 
@@ -187,13 +201,13 @@ def calculate_retirement_time(intent_request, session):
         session_attributes  = session["attributes"]
     card_title = "Calculate_Retirement_Time"
 
-    speech_output = "You can retire in " + str(_retirement_time()) + " years"
-
     if dialog_state in ("STARTED", "IN_PROGRESS"):
         return continue_dialog(session_attributes)
 
     elif dialog_state == "COMPLETED":
-        # return statement("trip_intent", "Have a good trip")
+
+        speech_output = "You can retire in " + str(_retirement_time()) + " years"
+
         reprompt_text = speech_output
         should_end_session = True
         return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
