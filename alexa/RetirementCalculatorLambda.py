@@ -175,7 +175,7 @@ def continue_dialog(session_attributes):
 
 
 def _retirement_time(age = 30):
-    return 65 - age
+    return 65 - int(age)
 
 
 
@@ -218,3 +218,6 @@ def calculate_retirement_time(intent_request, session):
         return statement("trip_intent", "No dialog")
 
 
+if __name__ == '__main__':
+    intent_request = {'type': 'IntentRequest', 'requestId': 'amzn1.echo-api.request.4390e9d3-974a-47db-9596-ae9c59e141cd', 'timestamp': '2018-10-01T19:31:41Z', 'locale': 'en-US', 'intent': {'name': 'CalculateRetirementTime', 'confirmationStatus': 'NONE', 'slots': {'Savings': {'name': 'Savings', 'value': '200000', 'confirmationStatus': 'NONE'}, 'Monthly_Savings': {'name': 'Monthly_Savings', 'value': '2000', 'confirmationStatus': 'NONE'}, 'Avg_Monthly_Spending': {'name': 'Avg_Monthly_Spending', 'value': '3000', 'confirmationStatus': 'NONE'}, 'Age': {'name': 'Age', 'value': '55', 'confirmationStatus': 'NONE'}}}, 'dialogState': 'COMPLETED'}
+    print(calculate_retirement_time(intent_request, None))
