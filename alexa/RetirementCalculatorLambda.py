@@ -174,8 +174,8 @@ def continue_dialog(session_attributes):
 
 
 
-def _retirement_time():
-    return 20
+def _retirement_time(age = 30):
+    return 65 - age
 
 
 
@@ -195,6 +195,7 @@ def _retirement_time():
 #  'dialogState': 'COMPLETED'}
 def calculate_retirement_time(intent_request, session):
     dialog_state = intent_request['dialogState']
+    intent = intent_request['intent']
 
     session_attributes = {}
     if session and "attributes" in session:
@@ -205,8 +206,9 @@ def calculate_retirement_time(intent_request, session):
         return continue_dialog(session_attributes)
 
     elif dialog_state == "COMPLETED":
+        age = intent['slots']['Age']['value']
 
-        speech_output = "You can retire in " + str(_retirement_time()) + " years"
+        speech_output = "You can retire in " + str(_retirement_time(age)) + " years"
 
         reprompt_text = speech_output
         should_end_session = True
@@ -214,3 +216,5 @@ def calculate_retirement_time(intent_request, session):
 
     else:
         return statement("trip_intent", "No dialog")
+
+
