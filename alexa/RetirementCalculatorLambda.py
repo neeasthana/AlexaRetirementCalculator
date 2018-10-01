@@ -4,6 +4,10 @@ Lambda function handler for Retirement Calculator Alexa skill
 
 from __future__ import print_function
 
+
+
+# --------------- ROUTERS ------------------ #
+
 def lambda_handler(event, context):
     """ Route the incoming request based on type (LaunchRequest, IntentRequest,
     etc.) The JSON body of the request is provided in the event parameter.
@@ -32,6 +36,32 @@ def lambda_handler(event, context):
         return on_session_ended(event['request'], event['session'])
 
 
+
+def on_intent(intent_request, session):
+    """ Called when the user specifies an intent for this skill """
+
+    print("on_intent requestId=" + intent_request['requestId'] +
+          ", sessionId=" + session['sessionId'])
+
+    intent = intent_request['intent']
+    intent_name = intent_request['intent']['name']
+
+    # Dispatch to your skill's intent handlers
+    if intent_name == "CalculateRetirementTime":
+        return calculate_retirement_time(intent_request, session)
+    elif intent_name == "AMAZON.HelpIntent":
+        return get_help_response()
+    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
+        return handle_session_end_request()
+    else:
+        raise ValueError("Invalid intent")
+
+
+
+# --------------- WELCOME AND ENDING HANDLERS ------------------ #
+
+
+
 def on_session_started(session_started_request, session):
     """ Called when the session starts """
 
@@ -47,33 +77,6 @@ def on_launch(launch_request, session):
     # Dispatch to your skill's launch
     return get_welcome_response()
 
-
-def on_intent(intent_request, session):
-    """ Called when the user specifies an intent for this skill """
-
-    print("on_intent requestId=" + intent_request['requestId'] +
-          ", sessionId=" + session['sessionId'])
-
-    intent = intent_request['intent']
-    intent_name = intent_request['intent']['name']
-
-    # Dispatch to your skill's intent handlers
-    if intent_name == "CalculateRetirementTime":
-        return calculate_retirement_time(intent_request, session)
-    # elif intent_name == "DojoStaffIntent":
-    #     return get_dojo_staff_response()
-    # elif intent_name == "DojoStackIntent":
-    #     return get_dojo_stack_response(intent_request)
-    # elif intent_name == "DojoInstructorIntent":
-    #     return get_dojo_instructor_response(intent_request)
-    elif intent_name == "AMAZON.HelpIntent":
-        return get_help_response()
-    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-        return handle_session_end_request()
-    else:
-        raise ValueError("Invalid intent")
-
-
 def on_session_ended(session_ended_request, session):
     """ Called when the user ends the session.
 
@@ -82,8 +85,6 @@ def on_session_ended(session_ended_request, session):
     print("on_session_ended requestId=" + session_ended_request['requestId'] +
           ", sessionId=" + session['sessionId'])
     # add cleanup logic here
-
-# --------------- Functions that control the skill's behavior ------------------
 
 
 def get_welcome_response():
@@ -99,6 +100,15 @@ def get_welcome_response():
         card_title, speech_output, reprompt_text, should_end_session))
 
 
+def handle_session_end_request():
+    card_title = "Session Ended"
+    speech_output = "Thank you for using the Retirement Calculator skill!"
+    # Setting this to true ends the session and exits the skill.
+    should_end_session = True
+    return build_response({}, build_speechlet_response(
+        card_title, speech_output, None, should_end_session))
+
+
 def get_help_response():
     session_attributes = {}
     card_title = "Help"
@@ -109,129 +119,8 @@ def get_help_response():
     return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
 
 
-def _retirement_time():
-    return 20
 
-
-def build_response2(message, session_attributes={}):
-    response = {}
-    response['version'] = '1.0'
-    response['sessionAttributes'] = session_attributes
-    response['response'] = message
-    return response
-
-
-def continue_dialog(session_attributes):
-    message = {}
-    message['shouldEndSession'] = False
-    message['directives'] = [{'type': 'Dialog.Delegate'}]
-    return build_response2(message, session_attributes)
-
-
-
-def calculate_retirement_time(intent_request, session):
-    dialog_state = intent_request['dialogState']
-
-    session_attributes = {}
-    if (session["attributes"]):
-        session_attributes  = session["attributes"]
-    card_title = "Calculate_Retirement_Time"
-    speech_output = "You can retire in " + str(_retirement_time()) + " years"
-
-    if dialog_state in ("STARTED", "IN_PROGRESS"):
-        return continue_dialog(session_attributes)
-
-    elif dialog_state == "COMPLETED":
-        # return statement("trip_intent", "Have a good trip")
-        reprompt_text = speech_output
-        should_end_session = True
-        return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
-
-    else:
-        return statement("trip_intent", "No dialog")
-
-
-
-# def get_dojo_info_response():
-#     session_attributes = {}
-#     card_title = "Dojo_Info"
-#     speech_output = "The Coding Dojo is a 3 month immersive web developement bootcamp. During these 3 months you will learn 3 full web developement stacks. The stacks that we offer are... Django, Rails, Mean, IOS, and PHP."
-
-#     reprompt_text = speech_output
-#     should_end_session = True
-#     return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
-
-
-# def get_dojo_staff_response():
-#     session_attributes = {}
-#     card_title = "Dojo_Staff"
-#     speech_output = "The Coding Dojo has a number of instructors at different locations. Our current locations are San Jose, Seattle, Burbank, Dallas, Washington DC, and Chicago. If you want information about a particular location you can ask the Coding Dojo skill. So for example you can ask... who are the instructors at the Chicago location."
-#     reprompt_text = speech_output
-#     should_end_session = True
-#     return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
-
-
-# def get_dojo_stack_response(intent_request):
-#     session_attributes = {}
-#     card_title = "Dojo_Stack"
-#     speech_output = ""
-#     dojo_city = intent_request["intent"]["slots"]["City"]["value"]
-
-#     if dojo_city == "Dallas":
-#         speech_output = "The Dallas location teaches Python, MEAN, and Ruby on Rails."
-#     elif dojo_city == "San Jose":
-#         speech_output = "The San Jose location teaches Python, MEAN, IOS, and Ruby on Rails."
-#     elif dojo_city == "Burbank":
-#         speech_output = "The Burbank location teaches Python, MEAN, PHP, IOS, and Ruby on Rails."
-#     elif dojo_city == "Washington":
-#         speech_output = "The Washington DC location teaches Python, MEAN, and Ruby on Rails."
-#     elif dojo_city == "Chicago":
-#         speech_output = "The Chicago location teaches Python, MEAN, and Ruby on Rails."
-#     elif dojo_city == "Seattle":
-#         speech_output = "The Seattle location teaches Python, MEAN, IOS, and Ruby on Rails."
-#     else:
-#         speech_output = "Sorry, the Coding Dojo does not have a location that matches what you have asked for."
-#     reprompt_text = speech_output
-#     should_end_session = True
-
-#     return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
-
-# def get_dojo_instructor_response(intent_request):
-#     session_attributes = {}
-#     card_title = "Dojo_Stack"
-#     speech_output = ""
-#     dojo_city = intent_request["intent"]["slots"]["City"]["value"]
-
-#     if dojo_city == "Dallas":
-#         speech_output = "The Dallas instructors are Authman, and Liam."
-#     elif dojo_city == "San Jose":
-#         speech_output = "The San Jose instructors are Pariece, Jay, and Brendan."
-#     elif dojo_city == "Burbank":
-#         speech_output = "The Burbank instructors are Chris, Eduardo, and Lance."
-#     elif dojo_city == "Washington":
-#         speech_output = "The Washington instructors are Mihn, and Dan."
-#     elif dojo_city == "Chicago":
-#         speech_output = "The Chicago instructors are Chris, and Mike."
-#     elif dojo_city == "Seattle":
-#         speech_output = "The Seattle instructors are Martin, Speros, and Charlie."
-#     else:
-#         speech_output = "Sorry, the Coding Dojo does not have a location that matches what you have asked for."
-#     reprompt_text = speech_output
-#     should_end_session = True
-
-#     return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
-
-
-def handle_session_end_request():
-    card_title = "Session Ended"
-    speech_output = "Thank you for using the Retirement Calculator skill!"
-    # Setting this to true ends the session and exits the skill.
-    should_end_session = True
-    return build_response({}, build_speechlet_response(
-        card_title, speech_output, None, should_end_session))
-
-
-# --------------- Helpers that build all of the responses ----------------------
+# --------------- RESPONSE BUILDERS ----------------------
 
 
 def build_speechlet_response(title, output, reprompt_text, should_end_session):
@@ -255,9 +144,59 @@ def build_speechlet_response(title, output, reprompt_text, should_end_session):
     }
 
 
+
 def build_response(session_attributes, speechlet_response):
     return {
         'version': '1.0',
         'sessionAttributes': session_attributes,
         'response': speechlet_response
     }
+
+
+
+def build_response2(message, session_attributes={}):
+    response = {}
+    response['version'] = '1.0'
+    response['sessionAttributes'] = session_attributes
+    response['response'] = message
+    return response
+
+
+def continue_dialog(session_attributes):
+    message = {}
+    message['shouldEndSession'] = False
+    message['directives'] = [{'type': 'Dialog.Delegate'}]
+    return build_response2(message, session_attributes)
+
+
+
+# --------------- CUSTOM INTENT HANDLERS ------------------ #
+
+
+
+def _retirement_time():
+    return 20
+
+
+
+def calculate_retirement_time(intent_request, session):
+    dialog_state = intent_request['dialogState']
+
+    session_attributes = {}
+    if session and "attributes" in session:
+        session_attributes  = session["attributes"]
+    card_title = "Calculate_Retirement_Time"
+
+    speech_output = "You can retire in " + str(_retirement_time()) + " years"
+
+    if dialog_state in ("STARTED", "IN_PROGRESS"):
+        return continue_dialog(session_attributes)
+
+    elif dialog_state == "COMPLETED":
+        # return statement("trip_intent", "Have a good trip")
+        reprompt_text = speech_output
+        should_end_session = True
+        return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
+
+    else:
+        return statement("trip_intent", "No dialog")
