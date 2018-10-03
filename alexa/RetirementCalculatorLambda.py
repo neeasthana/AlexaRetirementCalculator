@@ -174,8 +174,13 @@ def continue_dialog(session_attributes):
 
 
 
-def _retirement_time(age = 30):
-    return 65 - int(age)
+def _retirement_time(age = 30, monthly_savings=0, avg_monthly_savings=0, savings= 0):
+    result = {
+        "time": 65 - int(age),
+        "age": 65,
+        "monthly_spend": int(monthly_savings)
+    }
+    return result
 
 
 
@@ -207,8 +212,14 @@ def calculate_retirement_time(intent_request, session):
 
     elif dialog_state == "COMPLETED":
         age = intent['slots']['Age']['value']
+        monthly_savings = intent['slots']['Monthly_Savings']['value']
+        avg_monthly_savings = intent['slots']['Avg_Monthly_Spending']['value']
+        savings = intent['slots']['Savings']['value']
 
-        speech_output = "You can retire in " + str(_retirement_time(age)) + " years"
+        retirement_calculations = _retirement_time(age, monthly_savings, avg_monthly_savings, savings)
+
+        speech_output = ("You can retire in " + str(retirement_calculations['time']) + " years. "
+            "During retirement you should be able to spend about " + str(retirement_calculations['monthly_spend']) + " dollars every month")
 
         reprompt_text = speech_output
         should_end_session = True
