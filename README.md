@@ -36,6 +36,9 @@ How long till I can retire?
 	- college payments for kids
 	- having kids
 	- life expectancy
+	- inflation rate
+	- taxes
+	- expected retirement costs
 
 1. Tips to speed up retirement
 	- increase monthly savings
@@ -45,8 +48,17 @@ How long till I can retire?
 
 1. Incorporation of averages and target for the US based on age
 
+1. Disclaimer intent
+
+## References
+
+Retirement Calculator Math
+	- https://outgrow.co/blog/retirement-calculator
+	- https://www.wikihow.com/Calculate-Amount-Needed-for-Retirement
+
 ## Contact
 
 If you would like to contact the developer or provide any feedback please feel free to email me at 'neeasthana@gmail.com'
 
 Thank you for all of your support!
+
