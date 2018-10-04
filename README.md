@@ -1,11 +1,29 @@
 # AlexaRetirementCalculator
 An Alexa Skill to help users estimate their time to retirement by asking questions about their current and future financial situations. 
 
+The Retirement skill will also provide basic financial advice to help users reach their financial and retirement goals.
+
 ## Usage
 
-## Quick Start
+To open the skill say...
 
-### Pre-requisites
+'''
+Alexa, open retirement calculator
+	>> Welcome to the Alexa Retirement Calculator...
+'''
+
+Ask questions like:
+
+'''
+How long till I can retire?
+'''
+
+## Repository Contents
+
+- '/alexa' - necessary files for the Alexa Skill
+	- 'RetirementCalculatorLambda' - Lambda function that serves as the backend handler (written in python)
+	- 'interaction-model.json' - Interaction model for Skill including all Intents and Sample Utterances
+- 'README.md'
 
 ## Future features
 
