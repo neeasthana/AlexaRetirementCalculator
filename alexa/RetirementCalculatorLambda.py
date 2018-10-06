@@ -180,8 +180,8 @@ recursive function to obtain the amount of money you will have at retirement
 def _money_at_retirement(age, monthly_savings, monthly_spend, savings, retirement_age, investment_return, inflation = 1.02):
     if age >= retirement_age:
         result = {
-            "savings": savings, 
-            "monthly_spend": monthly_spend
+            "savings": round(savings),
+            "monthly_spend": round(monthly_spend)
         }
         return result
 
@@ -250,7 +250,7 @@ def calculate_retirement_time(intent_request, session):
             "retirement_info": retirement_calculations
         }
 
-        speech_output = ("When you are 65 you will have " + str(retirement_calculations['at_retirement']['savings']) + " saved after adjusting for inflation and growth. "
+        speech_output = ("When you are 65 you will have " + str(retirement_calculations['at_retirement']['savings']) + " saved after adjusting for 2 percent inflation and investment returns of 6 percent. "
             "During retirement you should be able to spend about " + str(retirement_calculations['at_retirement']['monthly_spend']) + " dollars every month")
 
         reprompt_text = speech_output
