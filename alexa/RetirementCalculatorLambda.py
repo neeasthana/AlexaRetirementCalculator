@@ -170,18 +170,42 @@ def continue_dialog(session_attributes):
 
 
 
-# --------------- CUSTOM INTENT HANDLERS ------------------ #
+# --------------- RETIREMENT MATH ------------------ #
 
 
 
-def _retirement_time(age = 30, monthly_savings=0, monthly_spend=0, savings= 0):
+'''
+recursive function to obtain the amount of money you will have at retirement
+'''
+def _money_at_retirement(age, monthly_savings, monthly_spend, savings, retirement_age, investment_return, inflation = 1.02):
+    if age >= retirement_age:
+        result = {
+            "savings": savings, 
+            "monthly_spend": monthly_spend
+        }
+        return result
+
+    new_savings = (savings * investment_return) + (12*monthly_savings)
+    new_age = age + 1
+    new_monthly_spend = monthly_spend * inflation
+    new_monthly_savings = monthly_savings * inflation
+
+    return _money_at_retirement(new_age, new_monthly_savings, new_monthly_spend, new_savings, retirement_age, investment_return)
+
+
+
+def _retirement_time(age = 30, monthly_savings=0, monthly_spend=0, savings= 0, retirement_age = 65, life_expectancy = 95, investment_return = 1.06):
+    
     result = {
-        "time": 65 - int(age),
+        "time": 65 - age,
         "age": 65,
-        "monthly_spend": int(monthly_spend)
+        "at_retirement": _money_at_retirement(age, monthly_savings, monthly_spend, savings, retirement_age, investment_return)
     }
     return result
 
+
+
+# --------------- CUSTOM INTENT HANDLERS ------------------ #
 
 
 # Example intent_request: 
@@ -211,10 +235,10 @@ def calculate_retirement_time(intent_request, session):
         return continue_dialog(session_attributes)
 
     elif dialog_state == "COMPLETED":
-        age = intent['slots']['Age']['value']
-        monthly_savings = intent['slots']['Monthly_Savings']['value']
-        monthly_spend = intent['slots']['Avg_Monthly_Spending']['value']
-        savings = intent['slots']['Savings']['value']
+        age = int(intent['slots']['Age']['value'])
+        monthly_savings = float(intent['slots']['Monthly_Savings']['value'])
+        monthly_spend = float(intent['slots']['Avg_Monthly_Spending']['value'])
+        savings = int(intent['slots']['Savings']['value'])
 
         retirement_calculations = _retirement_time(age, monthly_savings, monthly_spend, savings)
 
@@ -226,8 +250,8 @@ def calculate_retirement_time(intent_request, session):
             "retirement_info": retirement_calculations
         }
 
-        speech_output = ("You can retire in " + str(retirement_calculations['time']) + " years. "
-            "During retirement you should be able to spend about " + str(retirement_calculations['monthly_spend']) + " dollars every month")
+        speech_output = ("When you are 65 you will have " + str(retirement_calculations['at_retirement']['savings']) + " saved after adjusting for inflation and growth. "
+            "During retirement you should be able to spend about " + str(retirement_calculations['at_retirement']['monthly_spend']) + " dollars every month")
 
         reprompt_text = speech_output
         should_end_session = True
