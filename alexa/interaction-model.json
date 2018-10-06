@@ -70,11 +70,6 @@
                         }
                     ],
                     "samples": [
-                        "when my retirement is",
-                        "i would like to know when i can retire",
-                        "i would like to know when my retirement is",
-                        "how long till i can retire",
-                        "when will i be able to retire",
                         "when can i retire",
                         "when is my retirement",
                         "how much longer do i have till retirement",
@@ -82,6 +77,18 @@
                         "what my retirement time is",
                         "what is my retirement time",
                         "Calculate my retirement time"
+                    ]
+                },
+                {
+                    "name": "Disclaimer",
+                    "slots": [],
+                    "samples": [
+                        "how accurate are the estimates",
+                        "are these calculations accurate",
+                        "tell me the risks",
+                        "tell me the disclaimer",
+                        "What is the disclaimer",
+                        "What are the risks"
                     ]
                 }
             ],

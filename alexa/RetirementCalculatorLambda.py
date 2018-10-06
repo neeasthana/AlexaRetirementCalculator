@@ -49,6 +49,8 @@ def on_intent(intent_request, session):
     # Dispatch to your skill's intent handlers
     if intent_name == "CalculateRetirementTime":
         return calculate_retirement_time(intent_request, session)
+    elif intent_name == "Disclaimer":
+        return get_disclaimer(intent_request, session)
     elif intent_name == "AMAZON.HelpIntent":
         return get_help_response()
     elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
@@ -194,6 +196,10 @@ def _money_at_retirement(age, monthly_savings, monthly_spend, savings, retiremen
 
 
 
+# def _money_through_retirement(age, )
+
+
+
 def _retirement_time(age = 30, monthly_savings=0, monthly_spend=0, savings= 0, retirement_age = 65, life_expectancy = 95, investment_return = 1.06):
     
     result = {
@@ -260,6 +266,15 @@ def calculate_retirement_time(intent_request, session):
     else:
         return statement("trip_intent", "No dialog")
 
+
+def get_disclaimer(intent_request, session):
+    session_attributes = {}
+    if session and "attributes" in session:
+        session_attributes  = session["attributes"]
+    speech_output = "These calculations are hypothetical and do not represent the return on any particular investment. All investing is subject to risk, including the possible loss of the money you invest. The calculations provided serve as an estimate and are meant to be informative and will not accurately predict each situation."
+    reprompt_text = speech_output
+    should_end_session = False
+    return build_response(session_attributes, build_speechlet_response(card_title, speech_output, reprompt_text, should_end_session))
 
 if __name__ == '__main__':
     intent_request = {'type': 'IntentRequest', 'requestId': 'amzn1.echo-api.request.4390e9d3-974a-47db-9596-ae9c59e141cd', 'timestamp': '2018-10-01T19:31:41Z', 'locale': 'en-US', 'intent': {'name': 'CalculateRetirementTime', 'confirmationStatus': 'NONE', 'slots': {'Savings': {'name': 'Savings', 'value': '200000', 'confirmationStatus': 'NONE'}, 'Monthly_Savings': {'name': 'Monthly_Savings', 'value': '2000', 'confirmationStatus': 'NONE'}, 'Avg_Monthly_Spending': {'name': 'Avg_Monthly_Spending', 'value': '3000', 'confirmationStatus': 'NONE'}, 'Age': {'name': 'Age', 'value': '55', 'confirmationStatus': 'NONE'}}}, 'dialogState': 'COMPLETED'}
