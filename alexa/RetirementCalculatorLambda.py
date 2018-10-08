@@ -198,6 +198,20 @@ def _money_at_retirement(age, monthly_savings, monthly_spend, savings, retiremen
 
 # def _money_through_retirement(age, )
 
+'''
+function to find how much money you can spend monthly/yearly during your retirement
+exponent = age - life_expectancy
+savings/exponent * (1 + investment_return)^exponent 
+'''    
+def retirement_age(age, life_expectancy, savings, inflation, investment_return):
+    exponent = life_expectancy - age
+    yearly_spend = (savings / exponent) * ((1 + (investment_return- inflation)) ** exponent)
+    return {
+        "retirement_yearly_spend": yearly_spend,
+        "retirement_monthly_spend": yearly_spend/12
+    }
+
+
 
 
 def _retirement_time(age = 30, monthly_savings=0, monthly_spend=0, savings= 0, retirement_age = 65, life_expectancy = 95, investment_return = 1.06):
@@ -279,3 +293,5 @@ def get_disclaimer(intent_request, session):
 if __name__ == '__main__':
     intent_request = {'type': 'IntentRequest', 'requestId': 'amzn1.echo-api.request.4390e9d3-974a-47db-9596-ae9c59e141cd', 'timestamp': '2018-10-01T19:31:41Z', 'locale': 'en-US', 'intent': {'name': 'CalculateRetirementTime', 'confirmationStatus': 'NONE', 'slots': {'Savings': {'name': 'Savings', 'value': '200000', 'confirmationStatus': 'NONE'}, 'Monthly_Savings': {'name': 'Monthly_Savings', 'value': '2000', 'confirmationStatus': 'NONE'}, 'Avg_Monthly_Spending': {'name': 'Avg_Monthly_Spending', 'value': '3000', 'confirmationStatus': 'NONE'}, 'Age': {'name': 'Age', 'value': '55', 'confirmationStatus': 'NONE'}}}, 'dialogState': 'COMPLETED'}
     print(calculate_retirement_time(intent_request, None))
+
+    print(retirement_age(65, 95, 300000, .02, .05))
