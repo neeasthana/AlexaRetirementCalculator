@@ -196,7 +196,8 @@ def _money_at_retirement(age, monthly_savings, monthly_spend, savings, retiremen
 
 
 
-# def _money_through_retirement(age, )
+def _money_through_retirement(age, life_expectancy, savings, inflation, investment_return):
+    pass
 
 
 
