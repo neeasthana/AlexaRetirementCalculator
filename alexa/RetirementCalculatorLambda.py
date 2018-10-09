@@ -196,14 +196,12 @@ def _money_at_retirement(age, monthly_savings, monthly_spend, savings, retiremen
 
 
 
-# def _money_through_retirement(age, )
-
 '''
 function to find how much money you can spend monthly/yearly during your retirement
 exponent = age - life_expectancy
 savings/exponent * (1 + investment_return)^exponent 
 '''    
-def retirement_age(age, life_expectancy, savings, inflation, investment_return):
+def _money_through_retirement(age, life_expectancy, savings, inflation, investment_return):
     exponent = life_expectancy - age
     yearly_spend = (savings / exponent) * ((1 + (investment_return- inflation)) ** exponent)
     return {
