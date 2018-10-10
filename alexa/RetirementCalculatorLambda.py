@@ -3,6 +3,8 @@ Lambda function handler for Retirement Calculator Alexa skill
 """
 
 from __future__ import print_function
+import random
+
 
 
 
@@ -155,7 +157,6 @@ def build_response(session_attributes, speechlet_response):
     }
 
 
-
 def build_response2(message, session_attributes={}):
     response = {}
     response['version'] = '1.0'
@@ -169,6 +170,24 @@ def continue_dialog(session_attributes):
     message['shouldEndSession'] = False
     message['directives'] = [{'type': 'Dialog.Delegate'}]
     return build_response2(message, session_attributes)
+
+
+
+# --------------- RETIREMENT FACTS ------------------ #
+
+
+
+'''
+random retirement statistics
+'''
+def random_fact():
+    facts = [
+          "At the time of retirement the average four oh one k has one hundred thousand dollars"
+        , "Start early"
+        , "Use low fees index funds"
+        , "the time value of money"
+    ]
+    return facts[random.randint(0,len(facts)-1)]
 
 
 
