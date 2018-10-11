@@ -186,6 +186,7 @@ def random_fact():
         , "Start early"
         , "Use low fees index funds"
         , "the time value of money"
+        , "the rule of 72 is a simple trick to estimate how quickly your money will double. Just take the percentage of your investment return which is on average 7 percent in the stock market and do 72 divided by that number. So by this estimation the stock market will approximately double every 10 years"
     ]
     return facts[random.randint(0,len(facts)-1)]
 
