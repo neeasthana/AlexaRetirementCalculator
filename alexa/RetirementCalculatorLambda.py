@@ -288,7 +288,8 @@ def calculate_retirement_time(intent_request, session):
             "retirement_info": retirement_calculations
         }
 
-        speech_output = ("When you are 65 you will have " + str(retirement_calculations['at_retirement']['savings']) + " saved after adjusting for 2 percent inflation and investment returns of 6 percent. "
+        speech_output = ("Based on your current financial picture and savings habits we estimate that you will be able to retire in " str(retirement_calculations["time"]) + " years. " 
+            "At this time you will be " + str(retirement_calculations["age"]) + " and we estimate you will have " + str(retirement_calculations['at_retirement']['savings']) + " dollars saved after adjusting for 2 percent yearly inflation and investment returns of 6 percent annually. "
             "During retirement you should be able to spend about " + str(retirement_calculations['at_retirement']['monthly_spend']) + " dollars every month")
 
         reprompt_text = speech_output
