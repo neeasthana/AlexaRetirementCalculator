@@ -243,6 +243,27 @@ def _retirement_time(age = 30, monthly_savings=0, monthly_spend=0, savings= 0, r
 
 
 
+def _age_till_retirement(age = 30, life_expectancy = 95, monthly_savings=0, monthly_spend=0, savings= 0, investment_return = 1.06, inflation = 1.02):
+    # Iterate through current age to life expectancy
+    for i in range(age, life_expectancy):
+        # money if they retire at this age
+        money_at_retirement = _money_at_retirement(i, monthly_savings, monthly_spend, savings, retirement_age, investment_return, inflation)
+
+        # money through retirement
+        money_through_retirement = _money_through_retirement(i, life_expectancy, money_at_retirement["savings"],  inflation, investment_return - .02)
+
+        if money_at_retirement["monthly_spend"] >= money_through_retirement["retirement_monthly_spend"]:
+            result = {
+                "age": i,
+                "time": i - age, 
+                "money_at_retirement": money_at_retirement,
+                "money_through_retirement": money_through_retirement
+            }
+            return result
+    return None
+
+
+
 # --------------- CUSTOM INTENT HANDLERS ------------------ #
 
 
