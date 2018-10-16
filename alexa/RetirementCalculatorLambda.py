@@ -197,22 +197,17 @@ def random_fact():
 
 
 '''
-recursive function to obtain the amount of money you will have at retirement
+recursive function to obtain the amount of money you will have after one year
 '''
-def _money_at_retirement(age, monthly_savings, monthly_spend, savings, retirement_age, investment_return, inflation = 1.02):
-    if age >= retirement_age:
-        result = {
-            "savings": round(savings),
-            "monthly_spend": round(monthly_spend)
-        }
-        return result
-
+def _money_at_retirement(age, monthly_savings, monthly_spend, savings, investment_return = 1.06, inflation = 1.02):
     new_savings = (savings * investment_return) + (12*monthly_savings)
     new_age = age + 1
     new_monthly_spend = monthly_spend * inflation
     new_monthly_savings = monthly_savings * inflation
 
-    return _money_at_retirement(new_age, new_monthly_savings, new_monthly_spend, new_savings, retirement_age, investment_return)
+    return new_age, new_savings, new_monthly_savings, new_monthly_spend
+
+    # return _money_at_retirement(new_age, new_monthly_savings, new_monthly_spend, new_savings, retirement_age, investment_return)
 
 
 
@@ -224,11 +219,8 @@ savings/exponent * (1 + investment_return)^exponent
 def _money_through_retirement(age, life_expectancy, savings, inflation, investment_return):
     exponent = life_expectancy - age
     yearly_spend = (savings / exponent) * ((1 + (investment_return- inflation)) ** exponent)
-    return {
-        "retirement_yearly_spend": yearly_spend,
-        "retirement_monthly_spend": yearly_spend/12
-    }
-
+    yearly_spend_adjusted_retire_year = yearly_spend / ((1 + inflation) ** exponent)
+    return yearly_spend, yearly_spend/12, yearly_spend_adjusted_retire_year
 
 
 
@@ -247,17 +239,19 @@ def _age_till_retirement(age = 30, life_expectancy = 95, monthly_savings=0, mont
     # Iterate through current age to life expectancy
     for i in range(age, life_expectancy):
         # money if they retire at this age
-        money_at_retirement = _money_at_retirement(i, monthly_savings, monthly_spend, savings, retirement_age, investment_return, inflation)
+        new_age, new_savings, new_monthly_savings, new_monthly_spend = _money_at_retirement(i, monthly_savings, monthly_spend, savings, investment_return, inflation)
 
         # money through retirement
-        money_through_retirement = _money_through_retirement(i, life_expectancy, money_at_retirement["savings"],  inflation, investment_return - .02)
+        yearly_spend, monthly_spend, yearly_spend_adjusted_retire_year = _money_through_retirement(i, life_expectancy, new_savings, inflation, investment_return - .02)
 
-        if money_at_retirement["monthly_spend"] >= money_through_retirement["retirement_monthly_spend"]:
+        print(monthly_spend, new_monthly_spend)
+
+        if monthly_spend >= new_monthly_spend:
             result = {
                 "age": i,
                 "time": i - age, 
-                "money_at_retirement": money_at_retirement,
-                "money_through_retirement": money_through_retirement
+                "savings_at_retirement": new_savings,
+                "money_through_retirement": yearly_spend_adjusted_retire_year
             }
             return result
     return None
@@ -309,7 +303,7 @@ def calculate_retirement_time(intent_request, session):
             "retirement_info": retirement_calculations
         }
 
-        speech_output = ("Based on your current financial picture and savings habits we estimate that you will be able to retire in " str(retirement_calculations["time"]) + " years. " 
+        speech_output = ("Based on your current financial picture and savings habits we estimate that you will be able to retire in " + str(retirement_calculations["time"]) + " years. " 
             "At this time you will be " + str(retirement_calculations["age"]) + " and we estimate you will have " + str(retirement_calculations['at_retirement']['savings']) + " dollars saved after adjusting for 2 percent yearly inflation and investment returns of 6 percent annually. "
             "During retirement you should be able to spend about " + str(retirement_calculations['at_retirement']['monthly_spend']) + " dollars every month")
 
@@ -332,6 +326,8 @@ def get_disclaimer(intent_request, session):
 
 if __name__ == '__main__':
     intent_request = {'type': 'IntentRequest', 'requestId': 'amzn1.echo-api.request.4390e9d3-974a-47db-9596-ae9c59e141cd', 'timestamp': '2018-10-01T19:31:41Z', 'locale': 'en-US', 'intent': {'name': 'CalculateRetirementTime', 'confirmationStatus': 'NONE', 'slots': {'Savings': {'name': 'Savings', 'value': '200000', 'confirmationStatus': 'NONE'}, 'Monthly_Savings': {'name': 'Monthly_Savings', 'value': '2000', 'confirmationStatus': 'NONE'}, 'Avg_Monthly_Spending': {'name': 'Avg_Monthly_Spending', 'value': '3000', 'confirmationStatus': 'NONE'}, 'Age': {'name': 'Age', 'value': '55', 'confirmationStatus': 'NONE'}}}, 'dialogState': 'COMPLETED'}
-    print(calculate_retirement_time(intent_request, None))
+    # print(calculate_retirement_time(intent_request, None))
 
-    print(retirement_age(65, 95, 300000, .02, .05))
+    # print(retirement_age(65, 95, 300000, .02, .05))
+
+    print(_age_till_retirement(age = 30, life_expectancy = 95, monthly_savings=3000, monthly_spend=3000, savings= 100000, investment_return = 1.06, inflation = 1.02))
