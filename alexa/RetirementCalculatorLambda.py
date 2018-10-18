@@ -219,7 +219,7 @@ savings/exponent * (1 + investment_return)^exponent
 def _money_through_retirement(age, life_expectancy, savings, inflation, investment_return):
     exponent = life_expectancy - age
     yearly_spend = (savings / exponent) * ((1 + (investment_return- inflation)) ** exponent)
-    yearly_spend_adjusted_retire_year = yearly_spend / ((1 + inflation) ** exponent)
+    yearly_spend_adjusted_retire_year = yearly_spend / (inflation ** exponent)
     return yearly_spend, yearly_spend/12, yearly_spend_adjusted_retire_year
 
 
@@ -253,7 +253,7 @@ def _age_till_retirement(age = 30, life_expectancy = 95, monthly_savings=0, mont
         # money through retirement
         yearly_spend, retirement_monthly_spend, yearly_spend_adjusted_retire_year = _money_through_retirement(i, life_expectancy, new_savings, inflation, investment_return - .02)
 
-        print(retirement_monthly_spend, new_monthly_spend)
+        print(yearly_spend_adjusted_retire_year/12, new_monthly_spend)
 
         latest_calculations = {
             "age": new_age,
@@ -261,10 +261,12 @@ def _age_till_retirement(age = 30, life_expectancy = 95, monthly_savings=0, mont
             "savings_at_retirement": new_savings,
             "monthly_savings": new_monthly_savings,
             "monthly_spend": new_monthly_spend,
-            "monthly_spend_through_retirement": retirement_monthly_spend
+            "monthly_spend_through_retirement": retirement_monthly_spend,
+            "yearly_spend_adjusted_retire_year": yearly_spend_adjusted_retire_year,
+            "monthly_spend_adjusted_retire_year": yearly_spend_adjusted_retire_year/12
         }
 
-        if retirement_monthly_spend >= new_monthly_spend:
+        if yearly_spend_adjusted_retire_year/12 >= new_monthly_spend:
             return latest_calculations
     return latest_calculations
 
