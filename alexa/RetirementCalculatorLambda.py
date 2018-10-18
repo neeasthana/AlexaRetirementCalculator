@@ -236,25 +236,37 @@ def _retirement_time(age = 30, monthly_savings=0, monthly_spend=0, savings= 0, r
 
 
 def _age_till_retirement(age = 30, life_expectancy = 95, monthly_savings=0, monthly_spend=0, savings= 0, investment_return = 1.06, inflation = 1.02):
+    latest_calculations = {
+        "age": age,
+        "time": age - age, 
+        "savings_at_retirement": savings,
+        "monthly_savings": monthly_savings,
+        "monthly_spend": monthly_spend,
+        "monthly_spend_through_retirement": 0
+    }
+
     # Iterate through current age to life expectancy
     for i in range(age, life_expectancy):
         # money if they retire at this age
-        new_age, new_savings, new_monthly_savings, new_monthly_spend = _money_at_retirement(i, monthly_savings, monthly_spend, savings, investment_return, inflation)
+        new_age, new_savings, new_monthly_savings, new_monthly_spend = _money_at_retirement(i, latest_calculations["monthly_savings"], latest_calculations["monthly_spend"], latest_calculations["savings_at_retirement"], investment_return, inflation)
 
         # money through retirement
-        yearly_spend, monthly_spend, yearly_spend_adjusted_retire_year = _money_through_retirement(i, life_expectancy, new_savings, inflation, investment_return - .02)
+        yearly_spend, retirement_monthly_spend, yearly_spend_adjusted_retire_year = _money_through_retirement(i, life_expectancy, new_savings, inflation, investment_return - .02)
 
-        print(monthly_spend, new_monthly_spend)
+        print(retirement_monthly_spend, new_monthly_spend)
 
-        if monthly_spend >= new_monthly_spend:
-            result = {
-                "age": i,
-                "time": i - age, 
-                "savings_at_retirement": new_savings,
-                "money_through_retirement": yearly_spend_adjusted_retire_year
-            }
-            return result
-    return None
+        latest_calculations = {
+            "age": new_age,
+            "time": new_age - age, 
+            "savings_at_retirement": new_savings,
+            "monthly_savings": new_monthly_savings,
+            "monthly_spend": new_monthly_spend,
+            "monthly_spend_through_retirement": retirement_monthly_spend
+        }
+
+        if retirement_monthly_spend >= new_monthly_spend:
+            return latest_calculations
+    return latest_calculations
 
 
 
