@@ -253,21 +253,24 @@ def _age_till_retirement(age = 30, life_expectancy = 95, monthly_savings=0, mont
         # money through retirement
         yearly_spend, retirement_monthly_spend, yearly_spend_adjusted_retire_year = _money_through_retirement(i, life_expectancy, new_savings, inflation, investment_return - .02)
 
+
+
         print(yearly_spend_adjusted_retire_year/12, new_monthly_spend)
 
         latest_calculations = {
             "age": new_age,
             "time": new_age - age, 
-            "savings_at_retirement": new_savings,
-            "monthly_savings": new_monthly_savings,
-            "monthly_spend": new_monthly_spend,
-            "monthly_spend_through_retirement": retirement_monthly_spend,
-            "yearly_spend_adjusted_retire_year": yearly_spend_adjusted_retire_year,
-            "monthly_spend_adjusted_retire_year": yearly_spend_adjusted_retire_year/12
+            "savings_at_retirement": new_savings, # how much money you will have at the end of the year for your retirement (or at the end of the year if calculations are not done)
+            "monthly_savings": new_monthly_savings, # money saved every month after being adjusted for inflation
+            "monthly_spend": new_monthly_spend, # money spent every month after being adjusted for inflation
+            "monthly_spend_through_retirement": retirement_monthly_spend, # money that can be spent monthly through retirement (without inflation adjustment for retirement year)
+            "yearly_spend_adjusted_retire_year": yearly_spend_adjusted_retire_year, # money that can be spent yearly through retirement (with inflation adjustment for retirement year)
+            "monthly_spend_adjusted_retire_year": yearly_spend_adjusted_retire_year/12 # money that can be spent monthly through retirement (with inflation adjustment for retirement year)
         }
 
+        # Check to see if the adjusted for inflation retirement monthly spend is greater than the current monthly spend implying that you can retire now and still survive till your life expectancy
         if yearly_spend_adjusted_retire_year/12 >= new_monthly_spend:
-            return latest_calculations
+            break
     return latest_calculations
 
 
