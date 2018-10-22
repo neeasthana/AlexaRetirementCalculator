@@ -314,6 +314,8 @@ def calculate_retirement_time(intent_request, session):
 
         retirement_calculations = _retirement_time(age, monthly_savings, monthly_spend, savings)
 
+        _age_till_retirement = _age_till_retirement(age = age, monthly_savings=monthly_savings, monthly_spend=monthly_spend, savings= savings)
+
         session_attributes = {
             "age": age,
             "monthly_savings": monthly_savings,
@@ -323,15 +325,15 @@ def calculate_retirement_time(intent_request, session):
         }
 
         speech_output = ("Based on your current financial picture and savings habits we estimate that you will be able to retire in " + str(retirement_calculations["time"]) + " years. " 
-            "At this time you will be " + str(retirement_calculations["age"]) + " and we estimate you will have " + str(retirement_calculations['at_retirement']['savings']) + " dollars saved after adjusting for 2 percent yearly inflation and investment returns of 6 percent annually. "
-            "During retirement you should be able to spend about " + str(retirement_calculations['at_retirement']['monthly_spend']) + " dollars every month")
+            "At this time you will be " + str(retirement_calculations["age"]) + " and we estimate you will have " + str(retirement_calculations['savings_at_retirement']) + " dollars saved after adjusting for 2 percent yearly inflation and investment returns of 6 percent annually. "
+            "During retirement you should be able to spend about " + str(retirement_calculations['monthly_spend_through_retirement']) + " dollars every month")
 
         reprompt_text = speech_output
         should_end_session = True
         return build_response(session_attributes, build_speechlet_response(card_title,speech_output,reprompt_text,should_end_session))
 
     else:
-        return statement("trip_intent", "No dialog")
+        return statement("Calculate_Retirement_Time", "No dialog")
 
 
 def get_disclaimer(intent_request, session):
