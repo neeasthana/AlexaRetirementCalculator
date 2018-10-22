@@ -242,7 +242,9 @@ def _age_till_retirement(age = 30, life_expectancy = 95, monthly_savings=0, mont
         "savings_at_retirement": savings,
         "monthly_savings": monthly_savings,
         "monthly_spend": monthly_spend,
-        "monthly_spend_through_retirement": 0
+        "monthly_spend_through_retirement": 0,
+        "yearly_spend_adjusted_retire_year": 0, 
+        "monthly_spend_adjusted_retire_year": 0
     }
 
     # Iterate through current age to life expectancy
