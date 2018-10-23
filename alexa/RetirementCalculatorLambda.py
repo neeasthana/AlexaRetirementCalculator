@@ -92,7 +92,9 @@ def on_session_ended(session_ended_request, session):
 
 
 def get_welcome_response():
-
+    """
+    Welcome message when you open the Retirement Calculator Skill
+    """
     session_attributes = {}
     card_title = "Welcome"
     speech_output = "Welcome to the Alexa Retirement Calculator. We can help you estimate how long it will take you to retire based on your current financial situation."
@@ -105,6 +107,9 @@ def get_welcome_response():
 
 
 def handle_session_end_request():
+    """
+    Closing message when you end the Retirement Calculator Skill
+    """
     card_title = "Session Ended"
     speech_output = "Thank you for using the Retirement Calculator skill!"
     # Setting this to true ends the session and exits the skill.
@@ -114,6 +119,9 @@ def handle_session_end_request():
 
 
 def get_help_response():
+    """
+    Help message when you ask for assistance
+    """
     session_attributes = {}
     card_title = "Help"
     speech_output = "We can help you estimate how long it will take you to retire based on your current financial situation. A couple of examples of questions that I can help with are... What is the coding dojo... or, who are the instructors. Lets get started now by trying one of these."
@@ -177,10 +185,10 @@ def continue_dialog(session_attributes):
 
 
 
-'''
-random retirement statistics
-'''
 def random_fact():
+    """
+    random retirement statistics
+    """
     facts = [
           "At the time of retirement the average four oh one k has one hundred thousand dollars"
         , "Start saving and investing early"
@@ -196,10 +204,10 @@ def random_fact():
 
 
 
-'''
-recursive function to obtain the amount of money you will have after one year
-'''
 def _money_at_retirement(age, monthly_savings, monthly_spend, savings, investment_return = 1.06, inflation = 1.02):
+    """
+    recursive function to obtain the amount of money you will have after one year
+    """
     new_savings = (savings * investment_return) + (12*monthly_savings)
     new_age = age + 1
     new_monthly_spend = monthly_spend * inflation
@@ -210,13 +218,13 @@ def _money_at_retirement(age, monthly_savings, monthly_spend, savings, investmen
     # return _money_at_retirement(new_age, new_monthly_savings, new_monthly_spend, new_savings, retirement_age, investment_return)
 
 
-
-'''
-function to find how much money you can spend monthly/yearly during your retirement
-exponent = age - life_expectancy
-savings/exponent * (1 + investment_return)^exponent 
-'''    
+   
 def _money_through_retirement(age, life_expectancy, savings, inflation, investment_return):
+    """
+    function to find how much money you can spend monthly/yearly during your retirement
+    exponent = age - life_expectancy
+    savings/exponent * (1 + investment_return)^exponent 
+    """
     exponent = life_expectancy - age
     yearly_spend = (savings / exponent) * ((1 + (investment_return- inflation)) ** exponent)
     yearly_spend_adjusted_retire_year = yearly_spend / (inflation ** exponent)
@@ -337,6 +345,9 @@ def calculate_retirement_time(intent_request, session):
 
 
 def get_disclaimer(intent_request, session):
+    """
+    Financial Disclaimer for using this retirement calculator
+    """
     session_attributes = {}
     if session and "attributes" in session:
         session_attributes  = session["attributes"]
